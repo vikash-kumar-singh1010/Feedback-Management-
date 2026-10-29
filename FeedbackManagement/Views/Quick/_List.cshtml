@@ -1,0 +1,23 @@
+@model List<Feedback>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No feedback yet. Be the first!</p>
+}
+else
+{
+    foreach (var f in Model)
+    {
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <strong>@f.Name <small class="text-muted">(@f.Category)</small></strong>
+                    <span class="text-warning">@(new string('\u2605', f.Rating))@(new string('\u2606', 5 - f.Rating))</span>
+                </div>
+                <p class="mb-1">@f.Comments</p>
+                <small class="text-muted">@f.SubmittedOn.ToString("dd MMM yyyy, hh:mm tt")</small>
+                <button type="button" class="btn btn-sm btn-outline-danger float-end btn-delete" data-id="@f.Id">Delete</button>
+            </div>
+        </div>
+    }
+}

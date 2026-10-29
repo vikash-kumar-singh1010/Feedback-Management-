@@ -1,0 +1,6 @@
+@model Feedback
+
+<form id="feedbackForm" asp-controller="Quick" asp-action="Create" method="post">
+    <partial name="_FeedbackFields" model="Model" />
+    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+</form>

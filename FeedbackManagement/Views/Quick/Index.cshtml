@@ -1,0 +1,61 @@
+@model Feedback
+@{ ViewData["Title"] = "Single-Page Feedback"; }
+
+<div id="toast" class="alert alert-success d-none">Thank you! Your feedback was submitted.</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <h4>Share your feedback</h4>
+        <div id="formHost">
+            <partial name="_Form" model="Model" />
+        </div>
+    </div>
+    <div class="col-md-7">
+        <h4>What others said</h4>
+        <div id="listHost"></div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function loadList() {
+        fetch('@Url.Action("List", "Quick")')
+            .then(r => r.text())
+            .then(html => $('#listHost').html(html));
+    }
+
+    function token() { return $('#feedbackForm input[name="__RequestVerificationToken"]').val(); }
+
+    // AJAX submit
+    $(document).on('submit', '#feedbackForm', function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        if (!$form.valid()) return;                    // client-side validation first
+
+        fetch($form.attr('action'), { method: 'POST', body: new FormData(this) })
+            .then(r => r.text().then(html => ({ html: html, saved: r.headers.get('X-Saved') })))
+            .then(res => {
+                $('#formHost').html(res.html);
+                $.validator.unobtrusive.parse('#feedbackForm');   // re-bind validation to new HTML
+                if (res.saved) {
+                    loadList();
+                    $('#toast').removeClass('d-none');
+                    setTimeout(() => $('#toast').addClass('d-none'), 3000);
+                }
+            });
+    });
+
+    // AJAX delete
+    $(document).on('click', '.btn-delete', function () {
+        if (!confirm('Delete this feedback?')) return;
+        var fd = new FormData();
+        fd.append('id', $(this).data('id'));
+        fd.append('__RequestVerificationToken', token());
+        fetch('@Url.Action("Delete", "Quick")', { method: 'POST', body: fd })
+            .then(r => r.text())
+            .then(html => $('#listHost').html(html));
+    });
+
+    loadList();
+</script>
+}

@@ -1,0 +1,12 @@
+@model Feedback
+@{ ViewData["Title"] = "Edit Feedback"; }
+
+<h2>Edit Feedback</h2>
+
+<div class="row"><div class="col-md-6">
+    <form asp-action="Edit" method="post">
+        <partial name="_FeedbackFields" model="Model" />
+        <button type="submit" class="btn btn-primary">Update</button>
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary" })
+    </form>
+</div></div>

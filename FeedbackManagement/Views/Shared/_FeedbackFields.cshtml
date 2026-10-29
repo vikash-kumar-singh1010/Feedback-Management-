@@ -1,0 +1,47 @@
+@model Feedback
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@Html.HiddenFor(m => m.Id)
+
+<div class="mb-3">
+    @Html.LabelFor(m => m.Name, new { @class = "form-label" })
+    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Your name" })
+    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+</div>
+
+<div class="mb-3">
+    @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email", placeholder = "you@example.com" })
+    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+</div>
+
+<div class="mb-3">
+    @Html.LabelFor(m => m.Category, new { @class = "form-label" })
+    @Html.DropDownListFor(m => m.Category,
+        new SelectList(new[] { "Product", "Service", "Website", "Support" }, Model.Category),
+        "-- Select --", new { @class = "form-select" })
+    @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
+</div>
+
+<div class="mb-3">
+    <label class="form-label d-block">Rating</label>
+    @for (int i = 1; i <= 5; i++)
+    {
+        <div class="form-check form-check-inline">
+            @Html.RadioButtonFor(m => m.Rating, i, new { @class = "form-check-input", id = "rating" + i })
+            <label class="form-check-label" for="rating@(i)">@i &#9733;</label>
+        </div>
+    }
+    @Html.ValidationMessageFor(m => m.Rating, "", new { @class = "text-danger d-block" })
+</div>
+
+<div class="mb-3">
+    @Html.LabelFor(m => m.Comments, new { @class = "form-label" })
+    @Html.TextAreaFor(m => m.Comments, 4, 30, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.Comments, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-check mb-3">
+    @Html.CheckBoxFor(m => m.ContactBack, new { @class = "form-check-input" })
+    @Html.LabelFor(m => m.ContactBack, new { @class = "form-check-label" })
+</div>
